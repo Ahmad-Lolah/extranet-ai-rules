@@ -98,7 +98,9 @@ public class OrderService {
  * @return the processed order
  */
 public Order processOrder(@NotNull Long orderId) {
-    Order order = orderRepository.findById(orderId);
+    Order order = orderRepository.findById(orderId)
+        .orElseThrow(() -> new BusinessException("Order not found"));
+    
     if (CollectionUtils.isEmpty(order.getItems())) {
         throw new BusinessException("Order must contain at least one item");
     }
