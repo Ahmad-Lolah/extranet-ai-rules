@@ -94,10 +94,15 @@ public class OrderService {
  * Processes the order and updates inventory.
  * This method has the side effect of sending a notification email.
  * 
- * @param orderId the ID of the order to process
+ * @param orderId the ID of the order to process (must not be null)
  * @return the processed order
+ * @throws BusinessException if order is not found or has no items
  */
-public Order processOrder(@NotNull Long orderId) {
+public Order processOrder(Long orderId) {
+    if (orderId == null) {
+        throw new IllegalArgumentException("Order ID must not be null");
+    }
+    
     Order order = orderRepository.findById(orderId)
         .orElseThrow(() -> new BusinessException("Order not found"));
     
